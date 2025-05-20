@@ -1,0 +1,318 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.case-modal {
+  background: rgba(29, 48, 88, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: rgba(29, 48, 88, 0.95);
+  z-index: 2;
+  border-radius: 15px 15px 0 0;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.5rem;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.close-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.modal-content-scroll {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+  max-height: calc(80vh - 140px);
+  background: #1d3058;
+  color: white;
+}
+
+.case-description,
+.case-details {
+  margin-bottom: 2rem;
+  page-break-inside: avoid;
+}
+
+.case-description h3,
+.case-details h3 {
+  color: #60a5fa;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.case-description p,
+.case-details p {
+  color: #ffffff;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.case-details ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.case-details li {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  position: relative;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.case-details li:before {
+  content: "•";
+  color: #60a5fa;
+  position: absolute;
+  left: 0;
+}
+
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: center;
+  background: rgb(29, 48, 88);
+  border-radius: 0 0 15px 15px;
+}
+
+.download-button {
+  background-color: #3b82f6;
+  text-align: center;
+  color: white;
+  padding: 0.75rem 2rem;
+  border: none;
+  max-width: 400px;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.download-button:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.download-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.download-button::before {
+  content: "📄";
+  font-size: 1.2rem;
+}
+
+.download-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Стили для форм редактирования */
+.modal-input,
+.modal-textarea,
+.modal-select {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-select {
+  appearance: none;
+  background-image: url("../../assets/images/dropArrow.png");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.5em;
+  padding-right: 2.5rem;
+}
+
+.modal-select option {
+  background: #1d3058;
+  color: #ffffff;
+}
+
+.modal-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.modal-input:focus,
+.modal-textarea:focus,
+.modal-select:focus {
+  outline: none;
+  border-color: #60a5fa;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.array-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.array-input-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.array-input-row .modal-input {
+  margin-bottom: 0;
+}
+
+.remove-button {
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.remove-button:hover {
+  background: #dc2626;
+}
+
+.add-button {
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  align-self: flex-start;
+}
+
+.add-button:hover {
+  background: #059669;
+}
+
+/* Стилизация скроллбара */
+.modal-content-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.modal-content-scroll::-webkit-scrollbar-thumb {
+  background: rgba(96, 165, 250, 0.5);
+  border-radius: 4px;
+}
+
+.modal-content-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(96, 165, 250, 0.7);
+}
+
+@media (max-width: 768px) {
+  .case-modal {
+    width: 95%;
+    max-height: 90vh;
+  }
+
+  .modal-header {
+    padding: 1rem;
+  }
+
+  .modal-content-scroll {
+    padding: 1rem;
+  }
+
+  .modal-footer {
+    padding: 1rem;
+  }
+
+  .array-input-row {
+    flex-direction: column;
+  }
+
+  .remove-button {
+    align-self: flex-end;
+  }
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 1rem;
+  color: #ef4444;
+  text-align: center;
+  font-size: 0.9rem;
+}
+ 

@@ -1,0 +1,19 @@
+button {
+  border-radius: 62px;
+  padding: 1rem 3.375rem;
+  width: 13.625rem;
+  cursor: pointer;
+  line-height: 1;
+  border: 1px solid;
+}
+
+@media (max-width: 768px) {
+  .button--intro {
+    padding: 16px;
+    width: 100%;
+  }
+
+  .button--form {
+    box-sizing: border-box;
+  }
+}

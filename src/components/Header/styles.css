@@ -1,0 +1,51 @@
+header {
+  background-color: rgb(000, 000, 000, 0.37);
+  height: auto;
+  width: 100%;
+  padding: 15px 0px 15px;
+}
+
+.header-content-holder {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-nav {
+  width: auto;
+  display: flex;
+  text-transform: uppercase;
+  column-gap: 35px;
+}
+
+.user-email {
+  color: white;
+  margin-right: 1rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 4.6875rem;
+}
+
+/* BUTTON */
+
+.auth-button {
+  width: auto;
+  padding: 12px 22px;
+  transition: 0.3s;
+}
+
+.auth-button:hover {
+  background-color: #3b82f6;
+  border-color: rgb(000, 000, 000, 0);
+}
+
+@media (max-width: 768px) {
+  .user-email {
+    font-size: 0.7rem;
+    margin-right: 0;
+  }
+}
