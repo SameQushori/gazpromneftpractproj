@@ -1,56 +1,16 @@
 import { useState, useEffect } from "react";
 import "./styles.css";
 import Button from "../Button/Button";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 import CaseModal from "../CaseModal/CaseModal";
 import UserStats from "../UserStats/UserStats";
 import UploadSolution from "../UploadSolution/UploadSolution";
 
 const CaseCards = () => {
-  const [cases, setCases] = useState([
-    {
-      id: 1,
-      title: "Личный кабинет студента",
-      description:
-        "Создание интуитивно понятного и функционального личного кабинета для магистрантов, который будет интегрирован с учебными процессами, ресурсами университета и возможностями для профессионального роста.",
-      fileUrl: "/cases/case1.pdf",
-      functions: [
-        "Управление расписанием с возможностью добавления напоминаний",
-        "Доступ к учебным материалам и возможность обмена ими",
-        "Отслеживание успеваемости и получение рекомендаций",
-        "Карьерные возможности и ИПР",
-        "Формы обратной связи и опросы",
-      ],
-      platform: "Веб-приложение с адаптивным дизайном",
-      technologies: "React, Node.js/Django/FastAPI, PostgreSQL",
-      goals: [
-        "Упрощение доступа к ресурсам и информации",
-        "Повышение вовлеченности в учебный процесс",
-        "Улучшение коммуникации между студентами и преподавателями",
-        "Развитие навыков командной работы",
-      ],
-      artifacts: [
-        "Техническое задание с описанием целей и задач",
-        "Мнемосхема бизнес-процесса",
-        "Описание требований (use case/activity diagram)",
-        "Архитектура системы с sequence-диаграммой",
-        "Концептуальная модель данных",
-        "State machine для статусной модели",
-        "Визуальный макет в Figma/Adobe XD",
-      ],
-    },
-    {
-      id: 2,
-      title: "Оптимизация процессов",
-      description:
-        "Проанализируйте и оптимизируйте существующие бизнес-процессы компании. Предложите решения для автоматизации рутинных задач и улучшения эффективности работы.",
-      fileUrl: "/cases/case2.pdf",
-      difficulty: "Средняя",
-      timeLimit: "1 неделя",
-      requirements: "Аналитическое мышление, опыт работы с процессами",
-    },
-  ]);
-
+  const [cases, setCases] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
@@ -60,6 +20,30 @@ const CaseCards = () => {
   const [isStatsOpen, setIsStatsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+
+  // Загрузка кейсов из Firebase
+  const fetchCases = async () => {
+    try {
+      setIsLoading(true);
+      const casesCollection = collection(db, "cases");
+      const casesSnapshot = await getDocs(casesCollection);
+      const casesList = casesSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setCases(casesList);
+      setError(null);
+    } catch (err) {
+      setError("Ошибка при загрузке кейсов");
+      console.error("Error fetching cases:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCases();
+  }, []);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -106,39 +90,43 @@ const CaseCards = () => {
     }
   };
 
-  const handleDeleteCase = (caseId) => {
+  const handleDeleteCase = async (caseId) => {
     if (window.confirm("Вы уверены, что хотите удалить этот кейс?")) {
-      setCases((prevCases) => prevCases.filter((c) => c.id !== caseId));
-    }
-  };
-
-  const handleSaveCase = (caseData) => {
-    if (isEditing) {
-      if (selectedCase) {
-        // Редактирование существующего кейса
-        setCases((prevCases) =>
-          prevCases.map((c) =>
-            c.id === selectedCase.id ? { ...caseData, id: c.id } : c
-          )
-        );
-      } else {
-        // Создание нового кейса
-        const newCase = {
-          ...caseData,
-          id: Math.max(...cases.map((c) => c.id)) + 1,
-        };
-        setCases((prevCases) => [...prevCases, newCase]);
+      try {
+        await deleteDoc(doc(db, "cases", caseId));
+        await fetchCases();
+      } catch (err) {
+        setError("Ошибка при удалении кейса");
+        console.error("Error deleting case:", err);
       }
     }
   };
 
-  if (isAuthLoading) {
+  const handleSaveCase = async (caseData) => {
+    try {
+      if (isEditing && selectedCase) {
+        // Редактирование существующего кейса
+        await updateDoc(doc(db, "cases", selectedCase.id), caseData);
+      } else {
+        // Создание нового кейса
+        await addDoc(collection(db, "cases"), caseData);
+      }
+      await fetchCases();
+      handleCloseModal();
+    } catch (err) {
+      setError("Ошибка при сохранении кейса");
+      console.error("Error saving case:", err);
+    }
+  };
+
+  if (isAuthLoading || isLoading) {
     return <div className="loading">Загрузка...</div>;
   }
 
   return (
     <div className="cards-container">
       <h2 className="cases-title">Кейсы</h2>
+      {error && <div className="error-message">{error}</div>}
       {isAuthenticated ? (
         <>
           {isAdmin && (
